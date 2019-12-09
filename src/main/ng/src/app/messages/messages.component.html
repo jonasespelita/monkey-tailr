@@ -1,0 +1,7 @@
+<div id="messages">
+  <select (change)="onFileKeyChange($event.target.value)">
+    <option value=""></option>
+    <option *ngFor="let file of fileMaps" [value]="file.fileKey">{{file.fileLoc}}</option>
+  </select>
+  <pre id="content">{{curLog}}</pre>
+</div>
