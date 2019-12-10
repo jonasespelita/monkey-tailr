@@ -32,16 +32,19 @@ public class TailrService implements DisposableBean {
     @PostConstruct
     private void init() {
         // start tailing files and publishing appropriately
-        fileConfig.getFiles().forEach(
-                (fileKey, location) ->
-                        fileTailerMap.put(
-                                fileKey,
-                                Tailer.create(
-                                        new File(location),
-                                        UTF_8,
-                                        new MonkeyTailrListener(simpMessagingTemplate, fileKey),
-                                        1000,
-                                        true, false, 4096)));
+        fileConfig.getFiles()
+                .forEach((fileKey, location) -> {
+                    final Tailer myTailer = Tailer.create(
+                            new File(location),
+                            UTF_8,
+                            new MonkeyTailrListener(simpMessagingTemplate, fileKey),
+                            1000,
+                            true, false, 4096);
+
+                    fileTailerMap.put(
+                            fileKey,
+                            myTailer);
+                });
 
     }
 
@@ -68,8 +71,8 @@ public class TailrService implements DisposableBean {
         final StringBuilder logTailBuilder = new StringBuilder();
         long linesRead = 0L;
         try (ReversedLinesFileReader reader = new ReversedLinesFileReader(file, UTF_8)) {
-            String line = "";
-            while ((line != null) && (linesRead < numOfLines)) {
+            String line;
+            do {
                 line = reader.readLine();
 
                 logTailBuilder.insert(0,
@@ -77,7 +80,7 @@ public class TailrService implements DisposableBean {
                                 "=== BEGIN FILE ===\n" :
                                 line + "\n");
                 linesRead++;
-            }
+            } while ((line != null) && (linesRead < numOfLines));
         }
         return logTailBuilder.toString();
     }
