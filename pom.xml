@@ -93,7 +93,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>install</arguments>
+                            <arguments>install --proxy=http://wwwgate.ti.com:80</arguments>
                         </configuration>
                     </execution>
                     <execution>
