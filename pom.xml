@@ -108,7 +108,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <nodeVersion>v10.16.0</nodeVersion>
+                    <nodeVersion>v12.13.1</nodeVersion>
                     <workingDirectory>src/main/ng</workingDirectory>
                 </configuration>
             </plugin>
