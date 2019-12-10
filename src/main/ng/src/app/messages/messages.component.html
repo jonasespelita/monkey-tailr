@@ -5,10 +5,13 @@
     </h1>
   </div>
   <div>
-    <select (change)="onFileKeyChange($event.target.value)">
-      <option value=""></option>
-      <option *ngFor="let file of fileMaps" [value]="file.fileKey">{{file.fileLoc}}</option>
-    </select>
+    <label>
+      Log File:
+      <select (change)="onFileKeyChange($event.target.value)">
+        <option value=""></option>
+        <option *ngFor="let file of fileMaps" [value]="file.fileKey">{{file.fileLoc}}</option>
+      </select>
+    </label>
   </div>
   <div #scrollMe style="overflow-y: scroll; flex: 1">
     <pre id="content">{{curLog}}</pre>

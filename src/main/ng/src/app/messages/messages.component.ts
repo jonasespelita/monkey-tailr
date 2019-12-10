@@ -2,6 +2,7 @@ import {AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild} f
 import {RxStompService} from '@stomp/ng2-stompjs';
 import {Subscription} from 'rxjs';
 import {AppConfigService} from 'src/app/services/app-config.service';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-messages',
@@ -16,7 +17,8 @@ export class MessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('scrollMe', {static: false}) private scrollMe: ElementRef;
 
   constructor(private stompService: RxStompService,
-              private configService: AppConfigService) { }
+              private configService: AppConfigService,
+              private http: HttpClient) { }
 
   private _curLog: string = "";
 
@@ -48,18 +50,34 @@ export class MessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.testSub.unsubscribe();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    console.log(`found config:\n${JSON.stringify(this.configService.env)}!`);
+
+    // subscribe to test topic
     this.testSub = this.stompService.watch("/topic/test")
       .subscribe(msg => {
         console.log(new Date(), msg);
       });
 
-    console.log(`found config:\n${JSON.stringify(this.configService.env)}!`);
 
     // initialize filemaps
     Object.entries(this.configService.env.files)
       .forEach(entry => this._fileMaps.push(
         {fileKey: entry[0], fileLoc: entry[1].toString(), log: ""}));
+
+    for (const fileMap of this._fileMaps) {
+      await this.http
+        .get('/tail', {
+          params: {fileKey: fileMap.fileKey},
+          responseType: "text"
+        })
+        .toPromise()
+        .then(response => {
+          fileMap.log = response
+        })
+        .catch(error => console.warn("Error tailing response", error));
+
+    }
 
     // subscription to keys
     this._fileMaps.forEach(fileMap => {
