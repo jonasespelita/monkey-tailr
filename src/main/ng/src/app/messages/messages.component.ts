@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {RxStompService} from '@stomp/ng2-stompjs';
 import {Subscription} from 'rxjs';
 import {AppConfigService} from 'src/app/services/app-config.service';
@@ -8,10 +8,12 @@ import {AppConfigService} from 'src/app/services/app-config.service';
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements OnInit, OnDestroy {
+export class MessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
   private testSub: Subscription;
   private fileSubs: Subscription[] = [];
   private curSelFileKey: string;
+
+  @ViewChild('scrollMe', {static: false}) private scrollMe: ElementRef;
 
   constructor(private stompService: RxStompService,
               private configService: AppConfigService) { }
@@ -36,6 +38,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
   set selFileKey(value: string) {
     this._selFileKey = value;
+  }
+
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
   }
 
   ngOnDestroy(): void {
@@ -84,5 +90,11 @@ export class MessagesComponent implements OnInit, OnDestroy {
     this.curSelFileKey = fileKey;
     const filterElement = this._fileMaps.filter(fileMap => fileMap.fileKey === fileKey)[0];
     this._curLog = filterElement ? filterElement.log : "";
+  }
+
+  private scrollToBottom() {
+    console.log('scroll!');
+    const nativeElement = this.scrollMe.nativeElement;
+    nativeElement.scrollTop = nativeElement.scrollHeight;
   }
 }

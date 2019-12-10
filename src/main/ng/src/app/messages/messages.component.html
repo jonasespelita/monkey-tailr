@@ -1,7 +1,16 @@
-<div id="messages">
-  <select (change)="onFileKeyChange($event.target.value)">
-    <option value=""></option>
-    <option *ngFor="let file of fileMaps" [value]="file.fileKey">{{file.fileLoc}}</option>
-  </select>
-  <pre id="content">{{curLog}}</pre>
+<div id="messages" style="display: flex; flex-direction: column; height: 100%;">
+  <div style="text-align:center;">
+    <h1>
+      Welcome to Monkey Tailr!
+    </h1>
+  </div>
+  <div>
+    <select (change)="onFileKeyChange($event.target.value)">
+      <option value=""></option>
+      <option *ngFor="let file of fileMaps" [value]="file.fileKey">{{file.fileLoc}}</option>
+    </select>
+  </div>
+  <div #scrollMe style="overflow-y: scroll; flex: 1">
+    <pre id="content">{{curLog}}</pre>
+  </div>
 </div>
