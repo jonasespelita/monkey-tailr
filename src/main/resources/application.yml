@@ -2,6 +2,8 @@ logging:
   level:
     com.ti: debug
 
-tailr.files:
-  log: C:\Users\a0284021\Downloads\DeviceSample123=2=TI HTML5=en-us\index.html
-  log2: C:\Users\a0284021\Downloads\DeviceSample123=2=TI HTML5=en-us\index2.html
+tailr:
+  files:
+    log: C:\Users\a0284021\Downloads\DeviceSample123=2=TI HTML5=en-us\index.html
+    log2: C:\Users\a0284021\Downloads\DeviceSample123=2=TI HTML5=en-us\index2.html
+  brokerUrl: ws://localhost:8080/ws

@@ -15,5 +15,5 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "tailr")
 public class TailrFileProperties {
     private Map<String, String> files = new HashMap<>();
-
+    private String brokerUrl;
 }

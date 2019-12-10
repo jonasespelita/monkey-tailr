@@ -4,11 +4,17 @@ import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {InjectableRxStompConfig, RxStompService, rxStompServiceFactory} from '@stomp/ng2-stompjs';
-import {StompConfig} from 'src/app/stomp.config';
 import {MessagesComponent} from './messages/messages.component';
 import {AppConfigService} from 'src/app/services/app-config.service';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
+
+const StompConfigFactory = (appConfig: AppConfigService) => {
+  return {
+    brokerURL: appConfig.env.brokerUrl,
+    debug: msg => console.log(new Date(), msg)
+  };
+};
 
 @NgModule({
   declarations: [
@@ -22,10 +28,6 @@ import {FormsModule} from '@angular/forms';
     FormsModule
   ],
   providers: [
-    {
-      provide: InjectableRxStompConfig,
-      useValue: StompConfig
-    },
     AppConfigService,
     {
       provide: APP_INITIALIZER,
@@ -34,6 +36,11 @@ import {FormsModule} from '@angular/forms';
       },
       multi: true,
       deps: [AppConfigService]
+    },
+    {
+      provide: InjectableRxStompConfig,
+      deps: [AppConfigService],
+      useFactory: StompConfigFactory
     },
     {
       provide: RxStompService,

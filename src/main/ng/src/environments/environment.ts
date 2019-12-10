@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  files: {log: "C:\\Users\\a0284021\\Downloads\\DeviceSample123=2=TI HTML5=en-us\\index.html"}
+  files: {log: "C:\\Users\\a0284021\\Downloads\\DeviceSample123=2=TI HTML5=en-us\\index.html"},
+  brokerUrl: "ws://localhost:8080/ws"
 };
 
 /*
