@@ -9,11 +9,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * Properties loaded from context for tailr.
+ *
+ * @author a0284021
+ */
 @Component
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "tailr")
 public class TailrFileProperties {
+    /**
+     * file key - file location map key values.
+     */
     private Map<String, String> files = new HashMap<>();
+
+    /**
+     * web socket broker url to pass to UI
+     */
     private String brokerUrl;
 }

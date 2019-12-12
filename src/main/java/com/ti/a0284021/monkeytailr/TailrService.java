@@ -28,7 +28,9 @@ public class TailrService implements DisposableBean {
 
     private final Map<String, Tailer> fileTailerMap = new ConcurrentHashMap<>();
 
-
+    /**
+     * Service initializer that starts tailing configured files.
+     */
     @PostConstruct
     private void init() {
         // start tailing files and publishing appropriately
@@ -49,6 +51,9 @@ public class TailrService implements DisposableBean {
     }
 
 
+    /**
+     * Stops tailing all files on bean destroy.
+     */
     @Override
     public void destroy() {
         // closes all tailed files.

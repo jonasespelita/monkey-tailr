@@ -1,6 +1,3 @@
-logging:
-  level:
-    com.ti: debug
 
 tailr:
   files:
