@@ -99,7 +99,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>install --prod --proxy=http://wwwgate.ti.com:80</arguments>
+                            <arguments>install --proxy=http://wwwgate.ti.com:80</arguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -109,7 +109,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>run build</arguments>
+                            <arguments>run build-prod</arguments>
                         </configuration>
                     </execution>
                 </executions>
