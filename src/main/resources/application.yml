@@ -1,5 +1,5 @@
 logging:
   file:
     path: ./log
-    name: monkey-talir.log
+    name: monkey-tailr.log
   exception-conversion-word: "%wEx{short}"
