@@ -1,0 +1,9 @@
+# define log file properties here:
+# files: key value - log files to log
+# brokerUrl - where tailr websocket service is hosted
+
+#tailr:
+#  files:
+#    log: C:\Users\a0284021\Downloads\DeviceSample123=2=TI HTML5=en-us\index.html
+#    log2: C:\Users\a0284021\Downloads\DeviceSample123=2=TI HTML5=en-us\index2.html
+#  brokerUrl: ws://localhost:8080/ws

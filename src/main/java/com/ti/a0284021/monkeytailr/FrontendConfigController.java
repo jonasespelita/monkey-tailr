@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @RestController
@@ -15,6 +16,11 @@ import java.util.Optional;
 public class FrontendConfigController {
     // TODO: move this to a starter maybe???
     private final TailrFileProperties fileProps;
+
+    @PostConstruct
+    private void init() {
+        log.info("Exposing properties to frontend: {}", fileProps);
+    }
 
     @GetMapping("/frontend/config")
     public HttpEntity<TailrFileProperties> config() {
