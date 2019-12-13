@@ -16,7 +16,7 @@
     <button (click)="onClickDownload()" mat-button>Download</button>
   </mat-toolbar>
 
-  <div #scrollMe style="overflow-y: scroll; flex: 1;   background: #002b36;">
-    <textarea [lang]="'accesslog'" highlight-js>{{curLog}}</textarea>
+  <div #scrollMe style="overflow-y: scroll; flex: 1;   background: #002b36; color: #839496;">
+    <pre id="content">{{curLog}}</pre>
   </div>
 </div>

@@ -12,7 +12,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {HighlightJsModule} from 'ngx-highlight-js';
 
 const StompConfigFactory = (appConfig: AppConfigService) => {
   return {
@@ -31,7 +30,6 @@ const StompConfigFactory = (appConfig: AppConfigService) => {
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    HighlightJsModule,
     BrowserAnimationsModule,
     MatSelectModule,
     MatButtonModule,
