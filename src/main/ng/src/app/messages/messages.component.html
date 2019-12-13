@@ -1,19 +1,22 @@
-<div id="messages" style="display: flex; flex-direction: column; height: 100%;">
-  <div style="text-align:center;">
-    <h1>
-      Welcome to Monkey Tailr!
-    </h1>
-  </div>
-  <div>
-    <label>
-      Log File:
-      <select (change)="onFileKeyChange($event.target.value)">
-        <option value=""></option>
-        <option *ngFor="let file of fileMaps" [value]="file.fileKey">{{file.fileLoc}}</option>
-      </select>
-    </label>
-  </div>
-  <div #scrollMe style="overflow-y: scroll; flex: 1">
-    <pre id="content">{{curLog}}</pre>
+<div class="" id="messages"
+     style="display: flex; flex-direction: column; height: 100%;">
+
+
+  <mat-toolbar color="primary">
+    <span>Monkey Tailr</span>
+    <mat-form-field style="font-size: 10pt; width: 500px; margin-left: 10px ">
+      <mat-label>
+        Log File:
+      </mat-label>
+      <mat-select (selectionChange)="onFileKeyChange($event.value)">
+        <mat-option value=""></mat-option>
+        <mat-option *ngFor="let file of fileMaps" [value]="file.fileKey">{{file.fileLoc}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button (click)="onClickDownload()" mat-button>Download</button>
+  </mat-toolbar>
+
+  <div #scrollMe style="overflow-y: scroll; flex: 1;   background: #002b36;">
+    <textarea [lang]="'accesslog'" highlight-js>{{curLog}}</textarea>
   </div>
 </div>

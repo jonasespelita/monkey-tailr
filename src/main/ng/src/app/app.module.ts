@@ -8,6 +8,11 @@ import {MessagesComponent} from './messages/messages.component';
 import {AppConfigService} from 'src/app/services/app-config.service';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {HighlightJsModule} from 'ngx-highlight-js';
 
 const StompConfigFactory = (appConfig: AppConfigService) => {
   return {
@@ -25,7 +30,12 @@ const StompConfigFactory = (appConfig: AppConfigService) => {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    HighlightJsModule,
+    BrowserAnimationsModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatToolbarModule
   ],
   providers: [
     AppConfigService,

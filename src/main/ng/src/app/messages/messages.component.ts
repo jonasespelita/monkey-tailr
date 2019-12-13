@@ -3,6 +3,8 @@ import {RxStompService} from '@stomp/ng2-stompjs';
 import {Subscription} from 'rxjs';
 import {AppConfigService} from 'src/app/services/app-config.service';
 import {HttpClient} from '@angular/common/http';
+import {saveAs} from "file-saver";
+
 
 @Component({
   selector: 'app-messages',
@@ -105,9 +107,19 @@ export class MessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   onFileKeyChange(fileKey: string) {
+    console.log(`selected ${fileKey}`);
     this.curSelFileKey = fileKey;
     const filterElement = this._fileMaps.filter(fileMap => fileMap.fileKey === fileKey)[0];
     this._curLog = filterElement ? filterElement.log : "";
+  }
+
+  onClickDownload() {
+    this.http.get("/download/logFile",
+      {
+        params: {fileKey: this.curSelFileKey},
+        responseType: 'blob'
+      }).subscribe(data => saveAs(data, `${this.curSelFileKey}.log`))
+
   }
 
   private scrollToBottom() {

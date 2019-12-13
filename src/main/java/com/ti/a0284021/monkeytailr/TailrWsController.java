@@ -6,13 +6,16 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLConnection;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,7 +48,22 @@ public class TailrWsController {
         }
 
         return ResponseEntity.ok(tailrService.getTail(fileKey, numOfLines));
+    }
 
+    @GetMapping("/download/logFile")
+    public void downloadLog(
+            @RequestParam("fileKey") String fileKey,
+            HttpServletResponse response) throws IOException {
+        File logFile = tailrService.getLogFile(fileKey);
 
+        String mimeType = URLConnection.guessContentTypeFromName(logFile.getName());
+        if (mimeType == null) {
+            //unknown mimetype so set the mimetype to application/octet-stream
+            mimeType = "application/octet-stream";
+        }
+        response.setContentType(mimeType);
+        response.setHeader("Content-Disposition", String.format("attachment; filename=\"" + logFile.getName() + "\""));
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(logFile));
+        FileCopyUtils.copy(inputStream, response.getOutputStream());
     }
 }

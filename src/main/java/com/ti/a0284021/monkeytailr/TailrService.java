@@ -89,4 +89,8 @@ public class TailrService implements DisposableBean {
         }
         return logTailBuilder.toString();
     }
+
+    public File getLogFile(String fileKey) {
+        return new File(fileConfig.getFiles().get(fileKey));
+    }
 }
