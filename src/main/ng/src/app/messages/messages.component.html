@@ -1,19 +1,27 @@
 <div class="" id="messages"
      style="display: flex; flex-direction: column; height: 100%;">
-
-
   <mat-toolbar color="primary">
     <span>Monkey Tailr</span>
-    <mat-form-field style="font-size: 10pt; width: 500px; margin-left: 10px ">
-      <mat-label>
-        Log File:
-      </mat-label>
-      <mat-select (selectionChange)="onFileKeyChange($event.value)">
-        <mat-option value=""></mat-option>
-        <mat-option *ngFor="let file of fileMaps" [value]="file.fileKey">{{file.fileLoc}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <button (click)="onClickDownload()" mat-button>Download</button>
+    <div *ngIf="isInitialized" id="log-file-select">
+      <mat-form-field style="font-size: 10pt; width: 500px; margin-left: 10px ">
+        <mat-label>
+          Log File:
+        </mat-label>
+        <mat-select (selectionChange)="onFileKeyChange($event.value)">
+          <mat-option value=""></mat-option>
+          <mat-option *ngFor="let file of fileMaps" [value]="file.fileKey">{{file.fileLoc}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button (click)="onClickDownload()" mat-button>Download</button>
+    </div>
+    <div *ngIf="!isInitialized" class="loader" id="loader">
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__ball"></div>
+    </div>
   </mat-toolbar>
 
   <div #scrollMe style="overflow-y: scroll; flex: 1;   background: #002b36; color: #839496;">

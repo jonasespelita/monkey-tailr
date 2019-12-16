@@ -15,7 +15,6 @@ export class MessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
   private testSub: Subscription;
   private fileSubs: Subscription[] = [];
   private curSelFileKey: string;
-
   @ViewChild('scrollMe', {static: false}) private scrollMe: ElementRef;
 
   constructor(private stompService: RxStompService,
@@ -42,6 +41,12 @@ export class MessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   set selFileKey(value: string) {
     this._selFileKey = value;
+  }
+
+  private _isInitialized: boolean = false;
+
+  get isInitialized(): boolean {
+    return this._isInitialized;
   }
 
   ngAfterViewChecked(): void {
@@ -78,7 +83,6 @@ export class MessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
           fileMap.log = response
         })
         .catch(error => console.warn("Error tailing response", error));
-
     }
 
     // subscription to keys
@@ -95,8 +99,8 @@ export class MessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
 
 
+    this._isInitialized = true;
   }
-
 
   onSendTest() {
     this.stompService.publish(
