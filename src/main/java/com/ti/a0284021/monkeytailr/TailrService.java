@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,14 +49,14 @@ public class TailrService implements DisposableBean {
                 .forEach(this::tailFile);
 
         // scan path property and start publishing appropriately
-        try (Stream<Path> paths = Files.walk(Paths.get(fileConfig.getPath()))) {
+        try (Stream<Path> paths = Files.walk(Paths.get(fileConfig.getPath()), 1, FileVisitOption.FOLLOW_LINKS)) {
             paths.filter(Files::isRegularFile)
                     .map(Path::toAbsolutePath)
                     .map(Path::toString)
                     .forEach(location -> this.tailFile(UUID.randomUUID().toString(), location));
         }
 
-        log.info("Loaded files {}", fileTailerMap);
+        log.info("Loaded files {}", fileLocationMap);
     }
 
     private void tailFile(String fileKey, String location) {

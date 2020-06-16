@@ -14,8 +14,7 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.anEmptyMap;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
@@ -54,5 +53,6 @@ class TailrServiceTest {
         final Map<String, String> fileLocationMap = instance.getFileLocationMap();
         log.info("got file locations {}", fileLocationMap);
         assertThat(fileLocationMap, is(not(anEmptyMap())));
+        assertThat(fileLocationMap, aMapWithSize(4));
     }
 }
