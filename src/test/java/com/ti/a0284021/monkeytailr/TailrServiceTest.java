@@ -10,9 +10,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anEmptyMap;
+import static org.hamcrest.Matchers.not;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
@@ -24,14 +27,16 @@ class TailrServiceTest {
     SimpMessagingTemplate mockTemplate;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         final TailrFileProperties fileConfig = new TailrFileProperties();
         fileConfig.setFiles(ImmutableMap.of("fileKey", "testFixtures/EULA.md"));
+        fileConfig.setPath("testFixtures/testDirectory");
         instance = new TailrService(fileConfig, mockTemplate);
+        instance.init();
     }
 
     @Test
-    void getTail() throws IOException {
+    void getTail_FILE() throws IOException {
         final String fileTail = instance.getTail("fileKey", 5L);
 
         log.info("got fileTail{}", fileTail);
@@ -41,5 +46,13 @@ class TailrServiceTest {
                 "lacus vel ante eleifend, eu vulputate dolor facilisis. Quisque vitae odio tellus.\n" +
                 "Cras mi sem, pretium tempor nunc tristique, iaculis tempor nisl. Duis rhoncus velit\n" +
                 "quis lorem semper lacinia.\n"));
+    }
+
+
+    @Test
+    void getTail_DIR() {
+        final Map<String, String> fileLocationMap = instance.getFileLocationMap();
+        log.info("got file locations {}", fileLocationMap);
+        assertThat(fileLocationMap, is(not(anEmptyMap())));
     }
 }

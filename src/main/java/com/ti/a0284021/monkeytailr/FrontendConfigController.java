@@ -16,6 +16,7 @@ import java.util.Optional;
 public class FrontendConfigController {
     // TODO: move this to a starter maybe???
     private final TailrFileProperties fileProps;
+    private final TailrService tailrService;
 
     @PostConstruct
     private void init() {
@@ -25,7 +26,11 @@ public class FrontendConfigController {
     @GetMapping("/frontend/config")
     public HttpEntity<TailrFileProperties> config() {
 
-        return ResponseEntity.of(Optional.of(fileProps));
+        final Optional<TailrFileProperties> fileProps = Optional.of(this.fileProps);
+        fileProps.ifPresent(tailrFileProperties -> {
+            tailrFileProperties.setFiles(tailrService.getFileLocationMap());
+        });
+        return ResponseEntity.of(fileProps);
     }
 }
 

@@ -11,8 +11,13 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -27,27 +32,44 @@ public class TailrService implements DisposableBean {
 
 
     private final Map<String, Tailer> fileTailerMap = new ConcurrentHashMap<>();
+    private final Map<String, String> fileLocationMap = new ConcurrentHashMap<>();
+
+    public Map<String, String> getFileLocationMap() {
+        return fileLocationMap;
+    }
 
     /**
      * Service initializer that starts tailing configured files.
      */
     @PostConstruct
-    private void init() {
+    void init() throws IOException {
         // start tailing files and publishing appropriately
         fileConfig.getFiles()
-                .forEach((fileKey, location) -> {
-                    final Tailer myTailer = Tailer.create(
-                            new File(location),
-                            UTF_8,
-                            new MonkeyTailrListener(simpMessagingTemplate, fileKey),
-                            1000,
-                            true, false, 4096);
+                .forEach(this::tailFile);
 
-                    fileTailerMap.put(
-                            fileKey,
-                            myTailer);
-                });
+        // scan path property and start publishing appropriately
+        try (Stream<Path> paths = Files.walk(Paths.get(fileConfig.getPath()))) {
+            paths.filter(Files::isRegularFile)
+                    .map(Path::toAbsolutePath)
+                    .map(Path::toString)
+                    .forEach(location -> this.tailFile(UUID.randomUUID().toString(), location));
+        }
 
+        log.info("Loaded files {}", fileTailerMap);
+    }
+
+    private void tailFile(String fileKey, String location) {
+        final Tailer myTailer = Tailer.create(
+                new File(location),
+                UTF_8,
+                new MonkeyTailrListener(simpMessagingTemplate, fileKey),
+                1000,
+                true, false, 4096);
+
+        fileTailerMap.put(
+                fileKey,
+                myTailer);
+        fileLocationMap.put(fileKey, location);
     }
 
 

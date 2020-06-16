@@ -25,7 +25,12 @@ public class TailrFileProperties {
     private Map<String, String> files = new HashMap<>();
 
     /**
-     * web socket broker url to pass to UI
+     * web socket broker url to pass to UI.
      */
     private String brokerUrl;
+
+    /**
+     * Path location to scan for files to expose to websocket.
+     */
+    private String path;
 }
