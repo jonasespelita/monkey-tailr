@@ -59,6 +59,7 @@ public class TailrService implements DisposableBean {
         // scan path property and start publishing appropriately
         try (Stream<Path> paths = Files.walk(Paths.get(fileConfig.getPath()), 1, FileVisitOption.FOLLOW_LINKS)) {
             paths.filter(Files::isRegularFile)
+                    .peek(path -> log.debug("matching file {} to {}", path.getFileName().toString(), fileConfig.getFilePatternRegex()))
                     .filter(path -> path.getFileName().toString()
                             .matches(fileConfig.getFilePatternRegex()))
                     .map(Path::toAbsolutePath)

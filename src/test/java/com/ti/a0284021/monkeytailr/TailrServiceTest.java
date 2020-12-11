@@ -30,7 +30,7 @@ class TailrServiceTest {
         final TailrFileProperties fileConfig = new TailrFileProperties();
         fileConfig.setFiles(ImmutableMap.of("fileKey", "testFixtures/EULA.md"));
         fileConfig.setPath("testFixtures/testDirectory");
-        fileConfig.setFilePatternRegex("^[\\w]*(\\.txt)$");
+        fileConfig.setFilePatternRegex("^[\\w-]*(\\.txt)$");
         instance = new TailrService(fileConfig, mockTemplate);
         instance.init();
     }
