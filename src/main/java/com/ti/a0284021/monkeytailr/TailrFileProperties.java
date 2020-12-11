@@ -33,4 +33,10 @@ public class TailrFileProperties {
      * Path location to scan for files to expose to websocket.
      */
     private String path;
+
+    //language=RegExp
+    /**
+     * Regex pattern to match. Defaults to any.
+     */
+    private String filePatternRegex = "[\\w]*";
 }

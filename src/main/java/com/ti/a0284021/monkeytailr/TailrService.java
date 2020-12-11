@@ -22,6 +22,11 @@ import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+/**
+ * Tailr core service.
+ *
+ * @author j-espelita@ti.com
+ */
 @SuppressWarnings("WeakerAccess")
 @Service
 @RequiredArgsConstructor
@@ -35,6 +40,9 @@ public class TailrService implements DisposableBean {
     private final Map<String, Tailer> fileTailerMap = new ConcurrentHashMap<>();
     private final Map<String, String> fileLocationMap = new ConcurrentHashMap<>();
 
+    /**
+     * @return fileLocationMap
+     */
     public Map<String, String> getFileLocationMap() {
         return fileLocationMap;
     }
@@ -51,6 +59,8 @@ public class TailrService implements DisposableBean {
         // scan path property and start publishing appropriately
         try (Stream<Path> paths = Files.walk(Paths.get(fileConfig.getPath()), 1, FileVisitOption.FOLLOW_LINKS)) {
             paths.filter(Files::isRegularFile)
+                    .filter(path -> path.getFileName().toString()
+                            .matches(fileConfig.getFilePatternRegex()))
                     .map(Path::toAbsolutePath)
                     .map(Path::toString)
                     .forEach(location -> this.tailFile(UUID.randomUUID().toString(), location));
@@ -113,6 +123,12 @@ public class TailrService implements DisposableBean {
         return logTailBuilder.toString();
     }
 
+    /**
+     * Retrieves a file from file keys.
+     *
+     * @param fileKey file key to retrieve
+     * @return matching file for file key
+     */
     public File getLogFile(String fileKey) {
         return new File(fileConfig.getFiles().get(fileKey));
     }
